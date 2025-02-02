@@ -32,8 +32,10 @@ RUN git clone https://github.com/qemu/qemu.git qemu \
     && patch -p0 < xunpack.patch \
     && mkdir qemu/build 
 
+# COPY libxunpack32.so /home/ubuntu/qemu/build/contrib/plugins/libxunpack32.so
+
 WORKDIR /home/ubuntu/qemu/build
-RUN ../configure --enable-plugins --enable-xunpack --target-list=x86_64-softmmu,x86_64-linux-user \
+RUN ../configure --enable-plugins --enable-xunpack --target-list=x86_64-softmmu,x86_64-linux-user,i386-softmmu,i386-linux-user \
     && make \
     && sudo make install
 
@@ -69,6 +71,8 @@ RUN sudo chown -R ubuntu.ubuntu scripts \
     && sudo mkdir /mnt/rootfs
 RUN pip3 install -r scripts/requirements.txt
 RUN git clone https://github.com/marin-m/vmlinux-to-elf.git
+
+# COPY libxunpack32.so /home/ubuntu/qemu/build/contrib/plugins/libxunpack32.so
 
 WORKDIR /home/ubuntu/
 CMD ["/bin/bash"]
